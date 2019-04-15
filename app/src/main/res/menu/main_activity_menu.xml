@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+
+    >
+    <item
+        android:id="@+id/delete_btn"
+        android:title="Delete"
+        app:showAsAction="always"
+        android:visible="false"
+
+        />
+    <item
+        android:id="@+id/copy_btn"
+        android:title="Copy"
+        app:showAsAction="always"
+        android:visible="false"
+        />
+
+    <item
+        android:id="@+id/paste_btn"
+        android:title="Paste"
+        app:showAsAction="always"
+        android:visible="false"
+        />
+    <item
+        android:id="@+id/clipboard_btn"
+        android:title="clip"
+        app:showAsAction="always"
+        android:visible="false"
+        />
+    <item
+        android:id="@+id/newfolder_btn"
+        android:title="New Folder"
+        app:showAsAction="ifRoom"
+        android:visible="true"
+        />
+    <item
+        android:id="@+id/rename_btn"
+        android:title="Rename"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        />
+
+</menu>
