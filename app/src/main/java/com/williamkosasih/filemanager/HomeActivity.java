@@ -66,7 +66,8 @@ public class HomeActivity extends AppCompatActivity {
     private MenuItem newfolder_btn;
     private MenuItem rename_btn;
     static public String data_dir;
-    private static Context appcontext;
+    public static Context appcontext;
+    public static ThumbLoader tl=null;
 
 
 
@@ -92,6 +93,8 @@ public class HomeActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         //super.onBackPressed();
+        if(tl!=null)
+            tl.cancel(true);
         if(curpath.getAbsolutePath().equals(Environment.getExternalStorageDirectory().getAbsolutePath()))
         {
             finish();
@@ -101,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
             curpath=(File)curpath.getParentFile();
             adapter_update();
         }
+
 
     }
 
@@ -272,15 +276,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                String CHANNEL_ID="william_channel_001";
-                NotificationManager notifman = (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
-
-                NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"WilliamFilemanager",NotificationManager.IMPORTANCE_DEFAULT);
-                notifman.createNotificationChannel(channel);
-                Notification.Builder notif_builder = new Notification.Builder(HomeActivity.this,CHANNEL_ID)
-                        .setContentTitle("File Manager")
-                        .setContentText("Copying Files")
-                        .setSmallIcon(R.drawable.ic_launcher_foreground);
                 //notifbuilder.setContentTitle("notify_001").setContentText("File Copy Progress").setSmallIcon(R.drawable.ic_launcher_background).setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
                 // this doesn't work as it's supposed to.
@@ -288,34 +283,56 @@ public class HomeActivity extends AppCompatActivity {
                 //
                 if(!copy_items.isEmpty())
                 {
+                    final List<MyFileItem> copylist = new ArrayList<>(copy_items);
+                    AsyncTask.execute(new Runnable() {
 
-                    int size = copy_items.size();
-                    int progress=0;
+                        @Override
+                        public void run() {
+
+                            String CHANNEL_ID="william_channel_001";
+                            NotificationManager notifman = (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
+
+                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"WilliamFilemanager",NotificationManager.IMPORTANCE_DEFAULT);
+                            notifman.createNotificationChannel(channel);
+                            Notification.Builder notif_builder = new Notification.Builder(HomeActivity.this,CHANNEL_ID)
+                                    .setContentTitle("File Manager")
+                                    .setContentText("Copying Files")
+                                    .setSmallIcon(R.drawable.ic_launcher_foreground);
 
 
-                    for(MyFileItem mf : copy_items)
+                            int size = copy_items.size();
+                            int progress=0;
+
+                            Log.d("william","HEREMAN2");
+                            Log.d("william","copyitems = "+copy_items.size());
+
+                    for(MyFileItem mf : copylist)
                     {
+                        Log.d("william","HEREMAN3");
                         notif_builder.setProgress(size,progress,false);
                         notifman.notify(1,notif_builder.build());
-                        final File curfile = mf.getThisfile();
-                        final File Tocurdir = new File(curpath.toString()+"/"+curfile.getName());
+                        File curfile = mf.getThisfile();
+                        File Tocurdir = new File(curpath.toString()+"/"+curfile.getName());
+                        if(curpath.toString().equals(Tocurdir.toString()))
+                            adapter_update();
+                        else
+                        {
+                                    CopyClass.copyRec(curfile,Tocurdir);
+                                    Log.d("william","HEREMAN");
+                        }
 
-                        AsyncTask.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(curpath.toString().equals(Tocurdir.toString()))
-                                    adapter_update();
-                                copyRec(curfile,Tocurdir);
-
-                            }
-                        });
 
                         progress++;
                     }
+                    notif_builder.setContentText("Copy Complete").setProgress(0,0,false);
+                    notifman.notify(1,notif_builder.build());
+                    }
+
+
+                    });
                 }
 
-                notif_builder.setContentText("Copy Complete").setProgress(0,0,false);
-                notifman.notify(1,notif_builder.build());
+
 
                 copy_items.clear();
                 adapter_update();
@@ -370,63 +387,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }*/
 
-    private void copyRec(File src, File dst)
-    {
-        if(src.isDirectory())
-        {
-            try
-            {
-                FileUtils.copyDirectory(src,dst);
-            }
-            catch(IOException e)
-            {
-                //Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
-            }
-        }
-        else
-        {
-            try
-            {
-                FileUtils.copyFile(src,dst);
-            }
-            catch(IOException e)
-            {
 
-                /*//Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
-                String filename= dst.getAbsolutePath();
-                int extstart = filename.lastIndexOf(".");
-
-                String namewithoutext= filename.substring(0,extstart);
-                String nameext = filename.substring(extstart);
-                String finalname;
-
-                String indexstring = namewithoutext.substring(namewithoutext.length()-3,namewithoutext.length());
-                Log.d("filedebug","filename:"+filename);
-                Log.d("filedebug","namewithoutext:"+namewithoutext);
-                Log.d("filedebug","++INDEX:"+namewithoutext.substring(namewithoutext.length()-3,namewithoutext.length()));
-                Log.d("filedebug","0,1 :::"+namewithoutext.substring(0,1));
-                Log.d("filedebug","1,1 :::"+namewithoutext.substring(1,1));
-                Log.d("filedebug","2,2 :::"+namewithoutext.substring(2,2));
-                if((indexstring.charAt(0)=='(')&&indexstring.charAt(2)==')')
-                {
-                    int innum = Character.getNumericValue(indexstring.charAt(1));
-                    innum++;
-                    finalname = namewithoutext.substring(0,extstart-3);
-                    finalname+=("("+innum+")"+nameext);
-                }
-                else
-                {
-                    finalname=namewithoutext+"(1)"+nameext;
-                    //Toast.makeText(getApplicationContext(),finalname,Toast.LENGTH_LONG).show();
-                }
-                File altname = new File(finalname);
-                Log.d("filedebug","FINAL NAME : "+finalname);
-                copyRec(src,altname);
-                //Toast.makeText(getApplicationContext(),ext,Toast.LENGTH_LONG).show();
-                //File Altdir = new File(dst.getAbsolutePath()+"(1)");*/
-            }
-        }
-    }
 
     private void recursive_delete(File myfile)
     {
@@ -439,6 +400,7 @@ public class HomeActivity extends AppCompatActivity {
         }
         else
         {
+            while(tl!=null);
             myfile.delete();
         }
 

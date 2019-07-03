@@ -112,16 +112,20 @@ public class WilliamGridView extends BaseAdapter{
                 myimageview.setImageResource(R.drawable.file);
             if((extname.equals("jpeg"))||(extname.equals("png"))||(extname.equals("jpg")))
             {
-
-                    ThumbLoader tl = new ThumbLoader(myimageview,0);
-                    tl.execute(myitemlist.get(index).getThisfile());
+                    while(HomeActivity.tl!=null);
+                        HomeActivity.tl = new ThumbLoader(myimageview, 0);
+                        HomeActivity.tl.execute(myitemlist.get(index).getThisfile());
+                        HomeActivity.tl = null;
 
 
             }
             else if(extname.equals("mov")||extname.equals("mp4")||extname.equals("mkv")||extname.equals("avi"))
             {
-                ThumbLoader tl = new ThumbLoader(myimageview,1);
-                tl.execute(myitemlist.get(index).getThisfile());
+                while(HomeActivity.tl!=null);
+                    HomeActivity.tl = new ThumbLoader(myimageview, 1);
+                    HomeActivity.tl.execute(myitemlist.get(index).getThisfile());
+                    HomeActivity.tl = null;
+
             }
             else
             {
