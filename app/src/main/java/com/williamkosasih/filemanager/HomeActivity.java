@@ -23,6 +23,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -121,6 +122,15 @@ public class HomeActivity extends AppCompatActivity {
         if(!check_dir.exists())
             check_dir.mkdir();
 
+
+        final SwipeRefreshLayout swipe_refresh = (SwipeRefreshLayout)findViewById(R.id.main_swipe_refresh);
+        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter_update();
+                swipe_refresh.setRefreshing(false);
+            }
+        });
 
         foldergv=(GridView)findViewById(R.id.gridview);
         //ViewStore mvmodel = ViewModelProviders.of(this).get(ViewStore.class);

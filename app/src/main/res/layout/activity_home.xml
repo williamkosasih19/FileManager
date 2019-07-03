@@ -11,13 +11,20 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         >
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_swipe_refresh"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
         <GridView
             android:id="@+id/gridview"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
 
-            >
-        </GridView>
+            />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
