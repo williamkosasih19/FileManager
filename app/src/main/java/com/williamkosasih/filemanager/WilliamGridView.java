@@ -40,7 +40,7 @@ public class WilliamGridView extends BaseAdapter{
         myitemlist = new ArrayList<>();
         for(int i=0;i<size;i++)
             myitemlist.add(new MyFileItem(dirlist[i]));
-        MyFileItemCompare mfc = new MyFileItemCompare(1);
+        MyFileItemCompare mfc = new MyFileItemCompare(HomeActivity.sort_mode);
         Collections.sort(myitemlist,mfc);
 
     }
@@ -127,11 +127,6 @@ public class WilliamGridView extends BaseAdapter{
                     HomeActivity.tl = null;
 
             }
-            else
-            {
-
-            }
-
 
         }
 

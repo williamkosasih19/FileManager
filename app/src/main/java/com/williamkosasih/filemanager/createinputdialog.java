@@ -13,12 +13,11 @@ import android.widget.EditText;
 
 import java.io.File;
 
-public class createinputdialog extends DialogFragment
-{
+public class createinputdialog extends DialogFragment {
     private String pretext="";
     private int mode;
-    public void setPretext(String pretext)
-    {
+
+    public void setPretext(String pretext) {
         this.pretext=pretext;
     }
     public void setMode(int mode)
@@ -26,8 +25,7 @@ public class createinputdialog extends DialogFragment
         this.mode=mode;
     }
     @Override
-    public Dialog onCreateDialog(Bundle pass_inf)
-    {
+    public Dialog onCreateDialog(Bundle pass_inf) {
         AlertDialog.Builder my_builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inputdialog_inflater = getActivity().getLayoutInflater();
         final View v = inputdialog_inflater.inflate(R.layout.input_dialog,null);
@@ -40,14 +38,13 @@ public class createinputdialog extends DialogFragment
                 EditText input_text = (EditText)v.findViewById(R.id.input_et);
                 String Sinput_text = input_text.getText().toString();
                 String final_text = HomeActivity.curpath.toString()+"/"+Sinput_text;
-                switch(mode)
-                {
+                switch (mode) {
                     case 0:
                         File tocreate = new File(final_text);
                         tocreate.mkdirs();
                         break;
                     case 1:
-                        File source = HomeActivity.selected_items.get(0).getThisfile();
+                        File source = HomeActivity.selectedItems.get(0).getThisfile();
                         File target = new File(final_text);
                         source.renameTo(target);
                         break;

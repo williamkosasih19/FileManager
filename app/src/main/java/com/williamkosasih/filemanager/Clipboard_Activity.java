@@ -29,16 +29,11 @@ public class Clipboard_Activity extends AppCompatActivity {
 
     }
 
-    private void update_adapter()
-    {
-        ArrayList<String> sal = new ArrayList<>();
-
+    private void update_adapter() {
         String[] sar = new String[copy_items.size()];
         int index=0;
         for(MyFileItem mf : copy_items)
-        {
             sar[index++]= mf.getThisfile().getAbsolutePath();
-        }
         lv_clipboard.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,sar));
         lv_clipboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -50,8 +45,7 @@ public class Clipboard_Activity extends AppCompatActivity {
 
     }
 
-    public void clear_list(View view)
-    {
+    public void clear_list(View view) {
         copy_items.clear();
         update_adapter();
     }

@@ -16,29 +16,25 @@ public class ThumbLoader extends AsyncTask<File,Void,Bitmap> {
 
     ImageView imgv;
     int type;
-    public ThumbLoader(ImageView imgv, int type)
-    {
+
+    public ThumbLoader(ImageView imgv, int type) {
         super();
         this.type=type;
         this.imgv=imgv;
     }
 
-    private Bitmap return_blank()
-    {
-        //Bitmap thumbimage = Bitmap.createBitmap(0,0,Bitmap.Config.ARGB_8888);
+    private Bitmap return_blank() {
         HomeActivity.tl=null;
         return null;
     }
     @Override
-    protected Bitmap doInBackground(File[] myfiles)
-    {
+    protected Bitmap doInBackground(File[] myfiles) {
         if(isCancelled())
             return return_blank();
         Bitmap thumbimage;
         String md5 = AuxUtils.md5(myfiles[0].getAbsolutePath());
         File check_md5 = new File(HomeActivity.data_dir+md5+".jpg");
-        if(check_md5.exists())
-        {
+        if (check_md5.exists()) {
             if(isCancelled())
                 return return_blank();
             thumbimage = BitmapFactory.decodeFile(check_md5.getAbsolutePath());
@@ -46,28 +42,21 @@ public class ThumbLoader extends AsyncTask<File,Void,Bitmap> {
         }
         else
         {
-            if(type==0)
-            {
-
-
+            if (type == 0) {
                 if(isCancelled())
                     return return_blank();
                 Bitmap mbmap = BitmapFactory.decodeFile(myfiles[0].getAbsolutePath());
-                //Bitmap thumb = Bitmap.createScaledBitmap(mbmap,64,64,false);
                 if(isCancelled())
                     return return_blank();
                 thumbimage = ThumbnailUtils.extractThumbnail(mbmap, 64, 64);
 
 
-            }
-            else
-            {
+            } else {
                 if(isCancelled())
                     return return_blank();
                 thumbimage= ThumbnailUtils.createVideoThumbnail(myfiles[0].getAbsolutePath(),MediaStore.Video.Thumbnails.MICRO_KIND);
             }
-            try
-            {
+            try {
                 if(isCancelled())
                     return return_blank();
                 FileOutputStream out = new FileOutputStream(check_md5.getAbsolutePath());

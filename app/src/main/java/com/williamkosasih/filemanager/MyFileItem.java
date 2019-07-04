@@ -4,23 +4,22 @@ import java.io.File;
 
 public class MyFileItem {
     File thisfile;
-    boolean selected;
+    private boolean selected;
 
-    public MyFileItem(File thisfile)
-    {
+    public MyFileItem(File thisfile) {
         this.thisfile=thisfile;
         selected=false;
     }
-    public File getThisfile()
-    {
+
+    public File getThisfile() {
         return thisfile;
     }
-    public boolean isSelected()
-    {
+
+    public boolean isSelected() {
         return selected;
     }
-    public void setSelected(boolean selected)
-    {
+
+    public void setSelected(boolean selected) {
         this.selected=selected;
     }
 }

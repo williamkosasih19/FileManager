@@ -49,5 +49,12 @@
         app:showAsAction="never"
         android:visible="true"
         />
+    <item
+        android:id="@+id/settings_btn"
+        android:title="Settings"
+        android:visible="true"
+        app:showAsAction="never"
+
+        />
 
 </menu>
