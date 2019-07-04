@@ -69,6 +69,7 @@ public class HomeActivity extends AppCompatActivity {
     private MenuItem clipboard_btn;
     private MenuItem newfolder_btn;
     private MenuItem rename_btn;
+    private MenuItem about_btn;
     static public String data_dir;
     public static Context appcontext;
     public static ThumbLoader tl=null;
@@ -105,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         }
         else
         {
-            curpath=(File)curpath.getParentFile();
+            curpath = curpath.getParentFile();
             adapter_update();
         }
 
@@ -136,7 +137,7 @@ public class HomeActivity extends AppCompatActivity {
             check_dir.mkdir();
 
 
-        final SwipeRefreshLayout swipe_refresh = (SwipeRefreshLayout)findViewById(R.id.main_swipe_refresh);
+        final SwipeRefreshLayout swipe_refresh = findViewById(R.id.main_swipe_refresh);
         swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -145,7 +146,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        foldergv=(GridView)findViewById(R.id.gridview);
+        foldergv = findViewById(R.id.gridview);
         //ViewStore mvmodel = ViewModelProviders.of(this).get(ViewStore.class);
         //foldergv =((ViewStore) mvmodel).foldergv;
         foldergv.setNumColumns(4);
@@ -239,12 +240,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         activbar=menu;
         getMenuInflater().inflate(R.menu.main_activity_menu,menu);
-        delete_btn = (MenuItem) menu.findItem(R.id.delete_btn);
-        copy_btn = (MenuItem)menu.findItem(R.id.copy_btn);
-        paste_btn = (MenuItem)menu.findItem(R.id.paste_btn);
-        clipboard_btn = (MenuItem)menu.findItem(R.id.clipboard_btn);
-        newfolder_btn =(MenuItem)menu.findItem(R.id.newfolder_btn);
-        rename_btn= (MenuItem) menu.findItem(R.id.rename_btn);
+        delete_btn = menu.findItem(R.id.delete_btn);
+        copy_btn = menu.findItem(R.id.copy_btn);
+        paste_btn = menu.findItem(R.id.paste_btn);
+        clipboard_btn = menu.findItem(R.id.clipboard_btn);
+        newfolder_btn = menu.findItem(R.id.newfolder_btn);
+        rename_btn = menu.findItem(R.id.rename_btn);
+        about_btn = menu.findItem(R.id.about_btn);
+
 
         delete_btn.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -264,6 +267,17 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        about_btn.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                                 @Override
+                                                 public boolean onMenuItemClick(MenuItem menuItem) {
+
+                                                     Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+                                                     startActivity(intent);
+                                                     return true;
+                                                 }
+                                             }
+        );
 
         copy_btn.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -465,7 +479,7 @@ public class HomeActivity extends AppCompatActivity {
     {
         MyFileItem test_file;
         test_file=(MyFileItem) parent.getItemAtPosition(position);
-        LinearLayout gv_layout = (LinearLayout) findViewById(R.id.android_custom_gridview_toad);
+        LinearLayout gv_layout = findViewById(R.id.android_custom_gridview_toad);
 
         if(test_file.isSelected())
         {
@@ -474,7 +488,7 @@ public class HomeActivity extends AppCompatActivity {
             //parent.setBackgroundColor(Color.WHITE);
             //gv_layout.setBackgroundColor(Color.WHITE);
             test_file.setSelected(false);
-            selected_items.remove((MyFileItem)parent.getItemAtPosition(position));
+            selected_items.remove(parent.getItemAtPosition(position));
 
         }
         else
