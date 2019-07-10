@@ -1,25 +1,14 @@
 package com.williamkosasih.filemanager;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.ThumbnailUtils;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.williamkosasih.filemanager.AuxUtils;
-
-import com.williamkosasih.filemanager.R;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,8 +27,12 @@ public class WilliamGridView extends BaseAdapter{
         dirlist=curdir.getThisfile().listFiles();
         int size = dirlist.length;
         myitemlist = new ArrayList<>();
-        for(int i=0;i<size;i++)
+        for(int i=0;i<size;i++) {
+            if (dirlist[i].getName().charAt(0) == '.' && (HomeActivity.hideHiddenFiles))
+                continue;
             myitemlist.add(new MyFileItem(dirlist[i]));
+        }
+
         MyFileItemCompare mfc = new MyFileItemCompare(HomeActivity.sort_mode);
         Collections.sort(myitemlist,mfc);
 
@@ -48,7 +41,7 @@ public class WilliamGridView extends BaseAdapter{
     @Override
     public int getCount()
     {
-        return dirlist.length;
+        return myitemlist.size();
     }
 
     @Override
@@ -78,11 +71,11 @@ public class WilliamGridView extends BaseAdapter{
         }
         else
         {
-            mygridview= (View) convertView;
+            mygridview = convertView;
         }
 
-        TextView mytextview = (TextView) mygridview.findViewById(R.id.android_custom_gridview_toad_text);
-        final ImageView myimageview = (ImageView) mygridview.findViewById(R.id.android_custom_gridview_toad_image);
+        TextView mytextview = mygridview.findViewById(R.id.android_custom_gridview_toad_text);
+        final ImageView myimageview = mygridview.findViewById(R.id.android_custom_gridview_toad_image);
 
         final int setsize = 10;
 

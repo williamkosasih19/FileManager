@@ -1,16 +1,14 @@
 package com.williamkosasih.filemanager;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.List;
 
 public class Clipboard_Activity extends AppCompatActivity {
@@ -22,9 +20,9 @@ public class Clipboard_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clipboard_);
-        lv_clipboard = (ListView)findViewById(R.id.lv_clipboard);
+        lv_clipboard = findViewById(R.id.lv_clipboard);
         copy_items = HomeActivity.copy_items;
-        clear_btn = (Button)findViewById(R.id.clear_btn);
+        clear_btn = findViewById(R.id.clear_btn);
         update_adapter();
 
     }

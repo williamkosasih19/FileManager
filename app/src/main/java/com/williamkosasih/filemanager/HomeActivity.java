@@ -1,61 +1,40 @@
 package com.williamkosasih.filemanager;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Application;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.os.PersistableBundle;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class HomeActivity extends AppCompatActivity {
     private String Scurpath;
@@ -75,6 +54,10 @@ public class HomeActivity extends AppCompatActivity {
     public static Context appcontext;
     public static ThumbLoader tl=null;
     private MenuItem aboutButton;
+    public static boolean hideHiddenFiles = true;
+    NavController navController;
+    NavigationView navView;
+    private DrawerLayout drawerLayout;
 
     @Override
     public void onBackPressed() {
@@ -96,6 +79,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
@@ -104,9 +88,28 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         appcontext=this;
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
 
+
+        navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawers();
+                int id = menuItem.getItemId();
+                switch (id) {
+                    case R.id.newfolder_btn:
+                        Toast.makeText(getApplicationContext(), "yay I'm clicked", Toast.LENGTH_LONG).show();
+                        break;
+                }
+                return true;
+            }
+        });
+
+
+        drawerLayout = findViewById(R.id.drawer_layout);
 
         selectedItems = new ArrayList<>();
         copy_items = new ArrayList<>();
