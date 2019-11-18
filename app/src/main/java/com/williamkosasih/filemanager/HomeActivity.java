@@ -152,8 +152,6 @@ public class HomeActivity extends AppCompatActivity {
                 {
                     MyFileItem temp;
                     temp=(MyFileItem)parent.getItemAtPosition(position);
-                    //for(int i=0;i<selectedItems.size();i++)
-                    //selectedItems.get(i).setSelected(false);
                     selectedItems.clear();
 
                     if(temp.getThisfile().isDirectory())            //redundant
@@ -195,10 +193,6 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                 select_items(parent,position);
-
-
-
-
                 return true;
             }
         });
@@ -282,9 +276,11 @@ public class HomeActivity extends AppCompatActivity {
                         public void run() {
 
                             String CHANNEL_ID = "william_channel_001";
-                            NotificationManager notifman = (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
+                            NotificationManager notifman = (NotificationManager) getApplicationContext().
+                                    getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
 
-                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,"WilliamFilemanager",NotificationManager.IMPORTANCE_DEFAULT);
+                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                                    "WilliamFilemanager",NotificationManager.IMPORTANCE_DEFAULT);
                             notifman.createNotificationChannel(channel);
                             Notification.Builder notif_builder = new Notification.Builder(HomeActivity.this,CHANNEL_ID)
                                     .setContentTitle("File Manager")
@@ -371,16 +367,6 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
-    /*@Override
-    protected void onStop() {
-        super.onStop();
-        ViewStore mvmodel = ViewModelProviders.of(this).get(ViewStore.class);
-        mvmodel.foldergv=foldergv;
-
-    }*/
-
-
-
     private void recursive_delete(File myfile)
     {
         if(myfile.isDirectory())
@@ -398,12 +384,9 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
     public static void adapter_update()
     {
-        MyFileItem mfitem = new MyFileItem(curpath);
-        foldergv.setAdapter(new WilliamGridView(appcontext,mfitem));
-
+        foldergv.setAdapter(new WilliamGridView(appcontext,new MyFileItem(curpath)));
     }
 
     public void check_ribbon()
@@ -453,9 +436,6 @@ public class HomeActivity extends AppCompatActivity {
         if (testFile.isSelected())
         {
             parent.getChildAt(position-parent.getFirstVisiblePosition()).setBackgroundColor(Color.TRANSPARENT);
-            //parent.getSelectedView().setBackgroundColor(Color.WHITE);
-            //parent.setBackgroundColor(Color.WHITE);
-            //gv_layout.setBackgroundColor(Color.WHITE);
             testFile.setSelected(false);
             selectedItems.remove(parent.getItemAtPosition(position));
 
@@ -463,8 +443,6 @@ public class HomeActivity extends AppCompatActivity {
         else
         {
             parent.getChildAt(position-parent.getFirstVisiblePosition()).setBackgroundColor(Color.parseColor("#4CA99F"));
-            //gv_layout.setBackgroundColor(Color.DKGRAY);
-            //parent.setBackgroundColor(Color.DKGRAY);
             selectedItems.add((MyFileItem) parent.getItemAtPosition(position));
             testFile.setSelected(true);
         }
