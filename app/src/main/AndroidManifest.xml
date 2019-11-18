@@ -22,7 +22,7 @@
         <activity android:name=".Clipboard_Activity"></activity>
         <activity android:name=".AboutActivity"></activity>
         <activity android:name=".SettingsActivity"></activity>
-
+        <activity android:name=".CopyDialog"></activity>
 
         <provider
             android:name=".FileManagerProvider"

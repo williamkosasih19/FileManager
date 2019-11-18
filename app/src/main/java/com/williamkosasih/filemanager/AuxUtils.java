@@ -1,5 +1,10 @@
 package com.williamkosasih.filemanager;
 
+import android.view.ViewDebug;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -13,7 +18,7 @@ public class AuxUtils {
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
+            for (int i = 0; i < messageDigest.length; i++)
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
             return hexString.toString();
 
@@ -21,5 +26,16 @@ public class AuxUtils {
             e.printStackTrace();
         }
         return "";
+
+    }
+
+    static public String resolveFileNameConflict(File src, File dst) {
+        String baseName = src.getName().substring(0, src.getName().lastIndexOf('.'));
+        String extension = src.getName().substring(src.getName().lastIndexOf('.', src.getName().length()));
+        int offset = 1;
+        while (Files.exists(Paths.get(dst.getPath() + "/" + baseName + "(" + Integer.toString(offset) + ")" + extension))) {
+            offset++;
+        }
+        return baseName + "(" + Integer.toString(offset) + ")" + extension;
     }
 }

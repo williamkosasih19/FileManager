@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -58,6 +59,8 @@ public class HomeActivity extends AppCompatActivity {
     NavController navController;
     NavigationView navView;
     private DrawerLayout drawerLayout;
+    public static FragmentManager mainFragmentManager;
+
 
     @Override
     public void onBackPressed() {
@@ -81,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        mainFragmentManager = getSupportFragmentManager();
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
@@ -266,62 +269,7 @@ public class HomeActivity extends AppCompatActivity {
         pasteButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-
-                if(!copy_items.isEmpty())
-                {
-                    final List<MyFileItem> copylist = new ArrayList<>(copy_items);
-                    AsyncTask.execute(new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            String CHANNEL_ID = "william_channel_001";
-                            NotificationManager notifman = (NotificationManager) getApplicationContext().
-                                    getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
-
-                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                                    "WilliamFilemanager",NotificationManager.IMPORTANCE_DEFAULT);
-                            notifman.createNotificationChannel(channel);
-                            Notification.Builder notif_builder = new Notification.Builder(HomeActivity.this,CHANNEL_ID)
-                                    .setContentTitle("File Manager")
-                                    .setContentText("Copying Files")
-                                    .setSmallIcon(R.drawable.ic_launcher_foreground);
-
-
-                            int size = copy_items.size();
-                            int progress=0;
-
-                            Log.d("william","HEREMAN2");
-                            Log.d("william","copyitems = "+copy_items.size());
-
-                    for(MyFileItem mf : copylist)
-                    {
-                        Log.d("william","HEREMAN3");
-                        notif_builder.setProgress(size,progress,false);
-                        notifman.notify(1,notif_builder.build());
-                        File curfile = mf.getThisfile();
-                        File Tocurdir = new File(curpath.toString()+"/"+curfile.getName());
-                        if(curpath.toString().equals(Tocurdir.toString()))
-                            adapter_update();
-                        else
-                        {
-                                    CopyClass.copyRec(curfile,Tocurdir);
-                                    Log.d("william","HEREMAN");
-                        }
-
-
-                        progress++;
-                    }
-                    notif_builder.setContentText("Copy Complete").setProgress(0,0,false);
-                    notifman.notify(1,notif_builder.build());
-                    }
-
-
-                    });
-                }
-
-
-
+                CopyClass.copyRec(copy_items, curpath);
                 copy_items.clear();
                 adapter_update();
                 check_ribbon();
