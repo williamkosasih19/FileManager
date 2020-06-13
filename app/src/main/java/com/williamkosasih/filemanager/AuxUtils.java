@@ -1,7 +1,5 @@
 package com.williamkosasih.filemanager;
 
-import android.view.ViewDebug;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,7 +12,7 @@ public class AuxUtils {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
+            byte[] messageDigest = digest.digest();
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
@@ -31,11 +29,13 @@ public class AuxUtils {
 
     static public String resolveFileNameConflict(File src, File dst) {
         String baseName = src.getName().substring(0, src.getName().lastIndexOf('.'));
-        String extension = src.getName().substring(src.getName().lastIndexOf('.', src.getName().length()));
+        String extension =
+                src.getName().substring(src.getName().lastIndexOf('.'));
         int offset = 1;
-        while (Files.exists(Paths.get(dst.getPath() + "/" + baseName + "(" + Integer.toString(offset) + ")" + extension))) {
+        while (Files.exists(Paths.get(dst.getPath() +
+                "/" + baseName + "(" + offset + ")" + extension))) {
             offset++;
         }
-        return baseName + "(" + Integer.toString(offset) + ")" + extension;
+        return baseName + "(" + offset + ")" + extension;
     }
 }
